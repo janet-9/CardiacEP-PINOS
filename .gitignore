@@ -1,0 +1,38 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+.env/
+
+# IDE settings
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs and outputs
+*.log
+*.out
+
+# Data or model checkpoints
+datasets/
+datasets_2/
+logs/
+Results*/
+Batch*/
+checkpoints/
+*.pt
+*.pth
+*.h5
+*.npz
+*.npy
+*.ckpt
+
+# Extra Scripts
+2D_AP_PINO_Res_Test.py
+data_constructor_openCARP.py
+data_inspection.py
