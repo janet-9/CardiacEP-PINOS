@@ -19,7 +19,6 @@ Thumbs.db
 *.out
 
 # Data or model checkpoints
-datasets/
 datasets_2/
 logs/
 Results*/

@@ -1,0 +1,20 @@
+Simulation Info: simtype = stable, Conductivity Multipler = 1.0, resolution abstraction factor = x4, time resolution scaling = t5
+Coordinates loaded from mesh: Data/Data_101/coords_cm.npy
+Loaded tensor from Data/Data_101/2D_AP_stable_250um_2500ms_1.0_x4_t5.pt, shape = (2, 500, 101, 101)
+Truncated to first 500 timesteps.
+Grid_size: 101
+Grid_resolution: 0.09900990099009901 cm
+Timestep resolution: 5.0 ms
+Full simulation time period: 2495.0 ms
+Metadata: {'timesteps': 500, 'x_dim': 101, 'y_dim': 101, 'x_res': None, 'y_res': None, 't_res_ms': 5.0, 'duration_ms': 2495.0, 'path': 'Data/Data_101/2D_AP_stable_250um_2500ms_1.0_x4_t5.pt'}
+Channel 0 pre-normalisation range: 0.0000, 0.9881
+Resting potential (E_rest) = 0.00 mV, amplitude (A) = 0.99 mV
+Channel 0 not normalised, raw values retained
+Channel 1 pre-normalisation range: 0.0294, 2.1102
+Channel 1 not normalised, raw values retained
+Loaded dataset shape: torch.Size([2, 500, 101, 101])
+Input-Output pairs formed using moving window of [ Input: 5, Output: 5 timesteps ]
+torch.Size([2, 500, 101, 101])
+Input shape: torch.Size([491, 2, 5, 101, 101]), Output shape: torch.Size([491, 2, 5, 101, 101])
+Evaluation data shapes: {torch.Size([491, 2, 5, 101, 101])} {torch.Size([491, 2, 5, 101, 101])}
+Evaluation data shape: {torch.Size([2, 500, 101, 101])}
