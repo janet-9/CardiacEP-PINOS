@@ -11,14 +11,12 @@ from neuralop.data.transforms.normalizers import UnitGaussianNormalizer
 #from data_transform import inspect_data 
 
 class PTDataset:
-    """PTDataset is a base Dataset class for our library.
+    """PTDataset is a base Dataset class based on the dataloader from the NeuralOps Library, adpated for out PDE problem. 
             PTDatasets contain input-output pairs a(x), u(x) and may also
             contain additional information, e.g. function parameters,
             input geometry or output query points.
 
-            datasets may implement a download flag at init, which provides
-            access to a number of premade datasets for sample problems provided
-            in our Zenodo archive. 
+            Datasets are indexed by their spatial resolution and a 'conductivity multiplier' value that can be used to distinguish between simulations with different D values. 
 
         All datasets are required to expose the following attributes after init:
 

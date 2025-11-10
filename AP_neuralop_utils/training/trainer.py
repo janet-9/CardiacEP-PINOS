@@ -53,6 +53,9 @@ class Trainer:
     use_distributed : bool, default is False
         whether to use DDP
     verbose : bool, default is False
+
+    ==== AP PINOs adaptions ===
+    We added json logging of the relevant information for later analysis. 
     """
     def __init__(
         self,

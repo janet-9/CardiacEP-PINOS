@@ -3,6 +3,7 @@ import warnings
 from neuralop.layers.fourier_continuation import FCLegendre, FCGram
 
 """
+=== From the neuralops library, placed here for convinience with other functions === : 
 differentiation.py implements utilities for computing derivatives via finite-differences
 and Fourier/spectral differentiation methods
 """

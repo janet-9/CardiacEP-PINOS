@@ -9,27 +9,21 @@ import random
 from .tensor_dataset import TensorDataset
 from neuralop.data.transforms.data_processors import DefaultDataProcessor
 from neuralop.data.transforms.normalizers import UnitGaussianNormalizer
-#from data_transform import inspect_data 
 
 class PTDataset_eval:
-    """PTDataset is a base Dataset class for our library.
+    """ PTDataset is a base Dataset class based on the dataloader from the NeuralOps Library, adpated for out PDE problem. 
             PTDatasets contain input-output pairs a(x), u(x) and may also
             contain additional information, e.g. function parameters,
             input geometry or output query points.
 
-            datasets may implement a download flag at init, which provides
-            access to a number of premade datasets for sample problems provided
-            in our Zenodo archive. 
+            Datasets are indexed by their spatial resolution and a 'conductivity multiplier' value that can be used to distinguish between simulations with different D values. 
 
-        NEW: No loading of test-train split data: 
-          All datasets are required to expose the following attributes after init:
+        All datasets are required to expose the following attributes after init:
 
         eval_db: torch.utils.data.Dataset of evaluation examples
         data_processor: neuralop.data.transforms.DataProcessor to process data examples
             optional, default is None
 
-            NEW: Added in the inspect data function, designed to analyse and visualise 
-            the datasets loaded. 
         """
     def __init__(self,
                  root_dir: Union[Path, str],

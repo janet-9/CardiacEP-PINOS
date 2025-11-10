@@ -81,7 +81,7 @@ class WeightedSumLoss(object):
         return " + ".join([f"{w}*{l}" for l, w in self.losses])
 
 
-#NEW: Adding in a backbone loss for fine-tuning phase
+#NEW: Adding in a backbone loss for a fine-tuning phase
 class OperatorBackboneLoss(object):
     def __init__(self, model, reduction="mean", relative=True, eps=1e-8):
         super().__init__()
@@ -113,7 +113,7 @@ class OperatorBackboneLoss(object):
         loss = torch.stack(losses).mean() if self.reduction == "mean" else torch.stack(losses).sum()
         return loss
 
-# NEW: Adding in an adaptive training loss:
+# NEW: Adding in an adaptive training loss :
 class AdaptiveTrainingLoss(object):
     def __init__(self, aggregator, data_loss, phys_loss, bc_loss, ic_loss):
         super().__init__()
@@ -139,6 +139,6 @@ class AdaptiveTrainingLoss(object):
 
         # Optional monitoring
         if self.step % 100 == 0:
-            print(f"[SoftAdapt] Step {self.step}: λ = {lambdas.detach().cpu().numpy()}")
+            print(f"[Adapt] Step {self.step}: λ = {lambdas.detach().cpu().numpy()}")
 
         return total_loss

@@ -1,5 +1,7 @@
 from torch.utils.data.dataset import Dataset
+""" This is the same script as tensor_dataset.py present in the Neuralops library, placed here for convience with the adapted pt scripts. 
 
+    """
 
 class TensorDataset(Dataset):
     def __init__(self, x, y, transform_x=None, transform_y=None):

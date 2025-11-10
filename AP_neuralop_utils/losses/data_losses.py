@@ -12,7 +12,7 @@ from .differentiation import FiniteDiff
 import torch.nn.functional as F
 
 
-#loss function with relative Lp loss per channel - based on the LP loss function from the neuralops library 
+#LP loss function from the neuralops library - used as the primary data loss
 class LpLoss(object):
     """
     LpLoss provides the L-p norm between two 
@@ -118,7 +118,7 @@ class LpLoss(object):
 #MSE based loss for boundary locations
 class BoundaryLoss(object):
     """
-    Boundary Loss calculates the difference between the groudn truth and predicted tensors, only on the boundary locations. 
+    Boundary Loss calculates the difference between the ground truth and predicted tensors, only on the boundary locations. 
     It assumes a uniform 2D grid, with the boundary locations being the edges of this grid. 
     This loss is also designed to work with 2 channel data structure (V, W - for the AP equation) and calculates the boundary losses
     per channel and adds then in a weighted sum. 

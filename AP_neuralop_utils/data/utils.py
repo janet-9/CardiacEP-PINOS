@@ -3,6 +3,10 @@ from math import prod
 from pathlib import Path
 import torch
 
+""" Combined required functions from the Neuralops library, placed here for convience with the adapted pt scripts. 
+
+    """
+
 # Only import wandb and use if installed
 wandb_available = False
 try:
