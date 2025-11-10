@@ -1,14 +1,11 @@
 """
 Evaluating the results of training an FNO/PINO model on 2D AP simulations using the model as a simulator
 =============================
-Based on the plot_FNO_darcy.py example from the neuralop library. 
-
-Optional Arguments: 
+Arguments: 
     - File path to load the datasets and trained model from. 
-    - Training and testing set size - informed based on the size of the dataset
-    - Batch sizes for testing and training 
-    - Modes to keep during fourier transform step 
-    - Number of hidden channels to use
+    - Resolution of the evaluation data
+    - Time horizon to simulate out to. 
+    - Whether to start from the initial input of the ground truth or select an initial window at random. 
 """
 
 #Import required modules for constructing and training the model.
@@ -18,7 +15,7 @@ import torch
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
-from neuralop.models import FNO, FNO1d, FNO2d, FNO3d 
+from neuralop.models import FNO
 from neuralop.layers.embeddings import GridEmbeddingND
 from AP_neuralop_utils import Trainer
 from neuralop.training import AdamW
@@ -58,7 +55,7 @@ if __name__ == "__main__":
     parser.add_argument('-em', '--eval-metric', dest='eval_metric', default = 'l2', help='Evaluation metric that was used for saving the best model. Default is %(default)s')
     parser.add_argument('-ch', '--channels', dest = 'ch', type = int, default = 2, help = 'Number of channels to use in training. Default is %(default)s (Voltage only). Change to 2 to include W (recovery current).' )
    
-     # Arguments for simulation roll out:
+    # Arguments for simulation roll out:
     parser.add_argument('-ft', '--finetune', dest='fine_tune', action='store_true', help ='Boolean for inspecting results that were trained with a fine-tuning phase')
     parser.add_argument('-mw', '--moving-window', dest='moving_window', default = 5, type = int, help='Timestep moving window for input-output pair splitting. Default is %(default)s')
     parser.add_argument('-seen', '--seen', dest='seen', default = 5, type = float, help='Limit for seen timesteps in training. Default is %(default)s')
@@ -283,15 +280,15 @@ def info_extraction(dataset_info):
         
 '''
 RESULTS:
-Plot the training loss (h1) and evaluation losses (h1, l2, mse) over the epochs
+Plot the training and evaluation losses.
 
 Re-load the best performing model and use this model as a simulator on the evaluation set: 
-    - Extract the first sample from the dataset (specific number of timesteps) and use the model to predict the next window of timesteps. 
-    - Using the output of the model, predict the next set of timesteps in a feedback loop until the full timesteps of the ground truth have been simulated. 
+    - Extract the first (or random) sample from the dataset and use the model to predict the next window of timesteps. 
+    - Using the output of the model, predict the next set of timesteps in a feedback loop until the full timesteps of the prediction horizon have been simulated. 
    
 Following the use of the model as a simulator, compare the prediction to the ground truth:
     - Return information about the best/worst performing cells and timesteps.
-    - Plot the visualisations - 3 selected samples chosen to compare GT with prediction across all models 
+    - Plot the sample visualisations - 3 selected samples chosen to compare GT with prediction across all models 
     - Plot the APDs - 3 selected samples chosen to compare GT with prediction across all models 
 '''
 
@@ -933,13 +930,13 @@ def plot_selected_frames_with_input(x, gt, pred, save_dir, selected_frames=[0]):
     row_labels = ["Input", "GT", "Pred", "Error"]
 
     for col, frame in enumerate(selected_frames):
-        in_frame = voltage_in[frame-5]
+        in_frame = voltage_in[frame-int(args.moving_window)]
         gt_frame = voltage_gt[frame]
         pred_frame = voltage_pred[frame]
         err_frame = voltage_err[frame]
 
         im0 = axs[0, col].imshow(in_frame, cmap='viridis', vmin=vmin, vmax=vmax)
-        axs[0, col].set_title(f"Input - Timestep {frame-5}", fontsize=10)
+        axs[0, col].set_title(f"Input - Timestep {frame-int(args.moving_window)}", fontsize=10)
         im1 = axs[1, col].imshow(gt_frame, cmap='viridis', vmin=vmin, vmax=vmax)
         axs[1, col].set_title(f"GT - Timestep {frame}", fontsize=10)
         im2 = axs[2, col].imshow(pred_frame, cmap='viridis', vmin=vmin, vmax=vmax)

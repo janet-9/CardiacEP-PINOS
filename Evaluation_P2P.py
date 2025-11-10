@@ -793,73 +793,19 @@ plt.tight_layout(rect=[0, 0, 1, 0.95])
 fig.legend(
     lines, labels,
     loc='upper right',
-    bbox_to_anchor=(0.98, 0.955),  # y ~0.955 matches the title height
-    ncol=2,                        # side-by-side legend entries
+    bbox_to_anchor=(0.98, 0.955),  
+    ncol=2,                        
     frameon=False,
     handlelength=3,
     columnspacing=1.5,
     fontsize=10
 )
 
-# You can also slightly nudge the top title to align visually
-#axes[0].set_title(
-#    f"{titles[0]} - Cell ({cells[0][0]}, {cells[0][1]}) - Channel 0 (Voltage)",
-#    loc='left', pad=20
-#)
-
 # Save and close
 save_path = os.path.join(args.data_path, 'Best_Worst_Voltage_Cell_Plots.png')
 plt.savefig(save_path, bbox_inches='tight', dpi=300)
 plt.close(fig)
-'''
-if args.seen != 0.0:
-    seen_cutoff = 152   # frames 0–152 are training (seen)
-    total_frames = 200  # total frames
-    line_label = "Time Horizon (training)"
 
-# Create a figure with 2 vertical subplots
-fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
-
-for i, (cell_x, cell_y) in enumerate(cells):
-    
-    ax = axes[i]
-
-    # Full ground truth (plot the entire dataset)
-    gt_full_series = gt[0, :, cell_x, cell_y].detach().cpu().numpy()
-    # Prediction rollout (starting from the random initial window)
-    pred_series = pred[0, :, cell_x, cell_y].detach().cpu().numpy()
-
-    print("x_gt_full shape:", x_gt_full.shape)
-    print("pred_series shape:", pred_series.shape)
-
-
-    # Plot full GT and prediction rollout
-    ax.plot(x_gt_full, gt_full_series, label='Ground Truth (full)', color='blue', linewidth=2)
-    ax.plot(x_gt_full, pred_series, label='Prediction', color='red', linewidth=2, linestyle='--')
-
-
-    ax.set_title(f"{titles[i]} - Cell ({cell_x}, {cell_y}) - Channel 0 (Voltage)")
-    ax.set_ylabel("Voltage (AU)")
-    ax.grid(False)
-
-    # Optional: mark unseen horizon
-    if args.seen != 0.0:
-        ax.axvline(x=seen_cutoff, color='black', linestyle=':', linewidth=2)
-        #ax.text(args.seen + 2, ax.get_ylim()[1]*0.95, '', color='green', rotation=90, verticalalignment='top')
-    
-    ax.legend(loc="upper right")
-
-# Common x-label
-#axes[-1].set_xlabel("Time step (AU)")
-# Convert tick labels from frame index → milliseconds
-axes[-1].set_xlabel("Time step (ms)")
-for ax in axes:
-    ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, _: int(x * int(delta_t))))
-plt.tight_layout()
-save_path = os.path.join(args.data_path, 'Best_Worst_Voltage_Cell_Plots.png')
-plt.savefig(save_path, bbox_inches='tight', dpi=300)
-plt.close(fig)
-'''
 
 ## ----------------------------------------------------------------------- ##
 # TIME SERIES PLOTTING OF V AND W FOR SELECTED CELLS FOR COMPARISON 
@@ -992,7 +938,7 @@ def plot_selected_frames_with_input(x, gt, pred, save_dir, selected_frames=[0]):
 
     # Iterate over selected frames (columns)
     for col, frame in enumerate(selected_frames):
-        in_frame = voltage_in[frame - 5]
+        in_frame = voltage_in[frame - int(args.moving_window)]
         gt_frame = voltage_gt[frame]
         pred_frame = voltage_pred[frame]
         err_frame = voltage_err[frame]
@@ -1004,7 +950,7 @@ def plot_selected_frames_with_input(x, gt, pred, save_dir, selected_frames=[0]):
             axs[3, col].imshow(err_frame, cmap='bwr', vmin=-err_abs, vmax=err_abs)
         ]
         titles = [
-            f"Input - Timestep {frame-5}",
+            f"Input - Timestep {frame - int(args.moving_window)}",
             f"GT - Timestep {frame}",
             f"Pred - Timestep {frame}",
             f"Error - Timestep {frame}"
@@ -1035,85 +981,7 @@ def plot_selected_frames_with_input(x, gt, pred, save_dir, selected_frames=[0]):
     plt.close(fig)
 
     print(f" Saved input+GT+prediction visualization to {save_path}")
-'''
 
-def plot_selected_frames_with_input(x, gt, pred, save_dir, selected_frames=[0]):
-    """
-    Plots selected timesteps of INPUT, GT, PRED, and ERROR side-by-side.
-
-    Args:
-        x  : torch.Tensor [1, T_in, H, W] or [B, T_in, H, W] (model input sequence)
-        gt : torch.Tensor [1, T, H, W] or [B, T, H, W]      (ground truth)
-        pred : torch.Tensor [1, T, H, W] or [B, T, H, W]    (predictions)
-        save_dir : directory to save output image
-        selected_frames : list of timesteps to visualize
-    """
-
-    os.makedirs(save_dir, exist_ok=True)
-
-    # Convert tensors to numpy
-    voltage_in = x[0].detach().cpu().numpy()       # [T_in, H, W]
-    voltage_gt = gt[0].detach().cpu().numpy()      # [T, H, W]
-    voltage_pred = pred[0].detach().cpu().numpy()  # [T, H, W]
-    voltage_err = voltage_gt - voltage_pred        # [T, H, W]
-
-    # Color scale limits
-    vmin = min(voltage_in.min(), voltage_gt.min(), voltage_pred.min())
-    vmax = max(voltage_in.max(), voltage_gt.max(), voltage_pred.max())
-    err_abs = np.abs(voltage_err).max()
-
-    num_frames = len(selected_frames)
-
-    # 4 rows: Input, GT, Pred, Error
-    fig, axs = plt.subplots(4, num_frames, figsize=(4 * num_frames, 12))
-    if num_frames == 1:
-        axs = np.expand_dims(axs, axis=1)
-
-    row_labels = ["Input", "GT", "Pred", "Error"]
-
-    for col, frame in enumerate(selected_frames):
-        in_frame = voltage_in[frame-5]
-        gt_frame = voltage_gt[frame]
-        pred_frame = voltage_pred[frame]
-        err_frame = voltage_err[frame]
-
-        im0 = axs[0, col].imshow(in_frame, cmap='viridis', vmin=vmin, vmax=vmax)
-        axs[0, col].set_title(f"Input - Timestep {frame-5}", fontsize=10)
-        im1 = axs[1, col].imshow(gt_frame, cmap='viridis', vmin=vmin, vmax=vmax)
-        axs[1, col].set_title(f"GT - Timestep {frame}", fontsize=10)
-        im2 = axs[2, col].imshow(pred_frame, cmap='viridis', vmin=vmin, vmax=vmax)
-        axs[2, col].set_title(f"Pred - Timestep {frame}", fontsize=10)
-        im3 = axs[3, col].imshow(err_frame, cmap='bwr', vmin=-err_abs, vmax=err_abs)
-        #axs[3, col].set_title("Error (GT - Pred)", fontsize=10)
-
-        for row in range(4):
-            axs[row, col].axis('off')
-
-    # Add row labels on the left
-    for row in range(4):
-        axs[row, 0].text(
-            -0.3, 0.5, row_labels[row],
-            fontsize=12, fontweight='bold',
-            rotation='vertical', ha='center', va='center',
-            transform=axs[row, 0].transAxes
-        )
-
-    # Adjust spacing
-    plt.subplots_adjust(wspace=0.05, hspace=0.35, top=0.9, bottom=0.05)
-
-    # Add colorbars
-    for im, row_axes in zip([im0, im1, im2, im3], axs):
-        cbar = fig.colorbar(im, ax=row_axes.ravel().tolist(),
-                            fraction=0.02, pad=0.04, orientation='vertical')
-        cbar.ax.tick_params(labelsize=8)
-
-    #fig.suptitle("Input, Ground Truth, Prediction, and Error (Selected Frames)", fontsize=16)
-    save_path = os.path.join(save_dir, "Voltage_Samples_With_Input.png")
-    plt.savefig(save_path, dpi=200, bbox_inches='tight')
-    plt.close(fig)
-
-    print(f"Saved input+GT+prediction visualization to {save_path}")
-'''
 
 
 def plot_selected_frames(gt, pred, save_dir, selected_frames=[0, 50, 100, 150, 199]):

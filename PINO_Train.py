@@ -20,7 +20,7 @@ from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 
 # NeuralOps and data loading 
-from neuralop.models import FNO, FNO1d, FNO2d, FNO3d 
+from neuralop.models import FNO
 from neuralop.layers.embeddings import GridEmbeddingND
 from AP_neuralop_utils import Trainer
 from neuralop.training import AdamW
@@ -28,7 +28,7 @@ from AP_neuralop_utils import load_2D_AP
 from neuralop.utils import count_model_params
 from neuralop.losses import H1Loss, HdivLoss, MSELoss
 from neuralop.losses import Aggregator, SoftAdapt, Relobralo
-from AP_neuralop_utils import RMSELoss, APLoss, OperatorBackboneLoss, WeightedSumLoss, LpLoss, BoundaryLoss, ICLoss, BCNeumann, APFFTLoss, AdaptiveTrainingLoss
+from AP_neuralop_utils import RMSELoss, APLoss, WeightedSumLoss, LpLoss, BoundaryLoss, ICLoss, BCNeumann, APFFTLoss, AdaptiveTrainingLoss
 import ast
 
 # Device and system imports 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     #Physics Loss Parameters 
     parser.add_argument('-phys', '--phys-loss', dest = 'phys_loss', action = "store_true", help = 'Toggle to train using the physics loss. Default is data only')
     parser.add_argument('-p_meth', '--phys-meth', dest = 'phys_method', type = str, choices= {'finite_difference', 'finite_difference_fft', 'query_point'},  default = 'finite_difference', help = 'Method for calculating the physics loss. Default is %(default)s')
-    parser.add_argument('-adapt', '--adapt', dest = 'adapt', action = "store_true", help = 'Option to apply weight adaptation in secondary training round.')
+    parser.add_argument('-adapt', '--adapt', dest = 'adapt', type = float, choices= {1.0, 2.0, 3.0}, default = 1.0, help = 'Method for adapting the physics loss weights during PINO training. Default is %(default)s')
     
     
     parser.add_argument('-vl', '--vloss', dest='v_loss', default = 1.0, type = float, help='Weighting of the voltage pde loss for PINO loss function. Default is %(default)s')
@@ -138,14 +138,9 @@ else:
     dataset_type = "Unknown"
 
 # Build results folder name based on physics loss and dataset type
-if args.random_split:
-    rnd = 1
-else:
-    rnd = 0
-
 if args.phys_loss: 
     results_folder_name = (f"{args.results}_{dataset_type}_PINO_"
-                           f"{args.phys_method}_{args.res_loss}_resloss_{args.ic_loss}_icloss_{args.bc_loss}_bcloss_{args.w_loss}_wloss_{args.eval_metric}_eval_{args.D}_D_{args.frames}_frames_{timestamp}")
+                           f"{args.adapt}_{args.epochs}_{args.eval_metric}_{args.frames}_frames{timestamp}")
 else: 
     results_folder_name = f"{args.results}_{dataset_type}_Data_Only_{args.eval_metric}_{args.frames}_frames_{timestamp}"
 
@@ -170,13 +165,6 @@ sys.stdout = Tee(sys.__stdout__, log_file)
 #Set the device for training:
 device = 'cuda'
 
-'''
-wandb.init(
-    entity= 'hannah-f-lydon-king-s-college-london',
-    project= f"NO-tests-2DAPChaotic-vanFNO",   
-    name= args.data_path,         
-)
-'''
 
 ## ----------------------------------------------------------------------- ##
 #  LOADING AND PREPARING THE DATASETS (WITH INSPECTIONS)
@@ -302,21 +290,11 @@ data_processor = data_processor.to(device)
 # Establish the embedding and boundaries for the inclusion of the time channel (Adapting the spatial embeddings for the grid resolutions):
 print('\n### --------- ###\n')
 print(f"Mesh size: {args.mesh_size} cm x {args.mesh_size} cm")
-#if time_frames > 1:
 time_boundary = (float(delta_t) * (float(time_frames) -1) )
-#else:
-    #time_boundary = float(delta_t)
 print(f"Sample Time Boundary: {time_frames} frames with spacing {delta_t} ms =  {time_boundary} ms ")
 embedding = GridEmbeddingND(in_channels=args.ch, dim=3, grid_boundaries=[[0,float(time_boundary)], [0, args.mesh_size], [0, args.mesh_size]])
 print("Embedding Grid Boundaries =", embedding.grid_boundaries)
 
-'''
-# Establish the embedding and boundaries for the spatial dimensions only (Adapting the spatial embeddings for the grid resolutions):
-print('\n### --------- ###\n')
-print(f"Mesh size: {args.mesh_size} cm x {args.mesh_size} cm")
-embedding = GridEmbeddingND(in_channels=args.ch, dim=2, grid_boundaries=[[0, args.mesh_size], [0, args.mesh_size]])
-print("Embedding Grid Boundaries =", embedding.grid_boundaries)
-'''
 
 # Load one training sample for inspection
 train_dataset = train_loader.dataset
@@ -406,6 +384,11 @@ elif args.phys_method == "finite_difference_fft":
 else:
      print("Unknown method for residual loss calculation!")
 
+# --- Define a physics-only loss for evaluation ---
+phys_eval_loss = WeightedSumLoss(
+    losses=[resloss, ic, bcn],
+    weights=[args.res_loss, args.ic_loss, args.bc_loss]
+)
 
 # Establish Global Evaluation losses:
 eval_losses = {
@@ -415,7 +398,8 @@ eval_losses = {
         'ap_phys': resloss,
         'boundary': boundary,
         'ic': ic,
-        'bcn': bcn
+        'bcn': bcn,
+        'phys_loss': phys_eval_loss
     }
 
 ## ----------------------------------------------------------------------- ##
@@ -445,8 +429,130 @@ trainer = Trainer(model=model, n_epochs=args.init_epochs,
                   use_distributed=False,
                   verbose=True
                   )
+# Then train the model on the loaded dataset for an inital training run, checkpoint for each epoch
+json_log_path=os.path.join(results_path, "training_log.json")
+trainer.train(train_loader=train_loader,
+              test_loaders=test_loaders,
+              optimizer=optimizer,
+              scheduler=scheduler, 
+              regularizer=False, 
+              training_loss=train_loss,
+              eval_losses=eval_losses,
+              save_every = 1,
+              save_dir = results_path,
+              json_log_path = json_log_path
+              )
 
-#Train the model on the loaded dataset for a data pnly FNO training run
+## ----------------------------------------------------------------------- ##
+# MAIN TRAINING ROUND: PHYSICS LOSS INCLUDED IN THE TRAINING
+## ----------------------------------------------------------------------- ##
+
+# Pick the weighting combitnations for each of the losses
+
+
+if args.phys_loss:
+
+    if args.adapt == 2.0:
+
+        # Use SoftAdapt weighting during the main training phase
+
+        num_losses = 4  # data, phys, ic, bcn
+        initial_weights = {
+            'data': args.data_loss,
+            'phys': args.res_loss,  
+            'ic': args.ic_loss,     
+            'bc': args.bc_loss      
+        }
+    
+        aggregator = SoftAdapt(
+            params=model.parameters(),
+            num_losses=num_losses,
+            weights=initial_weights,
+            eps=1e-8
+        )
+
+        # Adaptive training loss using SoftAdapt
+        training_loss = AdaptiveTrainingLoss(
+            aggregator=aggregator,
+            data_loss=l2loss,          
+            phys_loss=resloss,      # apfdm or apfft depending on args
+            ic_loss=ic,       
+            bc_loss=bcn            
+        )
+
+    elif args.adapt == 3.0:
+            
+        # Use Relative weighting during the main training phase
+
+        num_losses = 4  # data, phys, ic, bcn
+        initial_weights = {
+            'data': args.data_loss,
+            'phys': args.res_loss,  
+            'ic': args.ic_loss,     
+            'bc': args.bc_loss      
+        }
+    
+
+        aggregator = Relobralo(
+        params=model.parameters(),
+        num_losses=num_losses,
+        alpha=getattr(args, "alpha", 0.95),
+        beta=getattr(args, "beta", 0.99),
+        tau=getattr(args, "tau", 1.0),
+        eps=1e-8,
+        weights=initial_weights
+    )
+
+        # Adaptive training loss using SoftAdapt
+        training_loss = AdaptiveTrainingLoss(
+            aggregator=aggregator,
+            data_loss=l2loss,          
+            phys_loss=resloss,      # apfdm or apfft depending on args
+            ic_loss=ic,       
+            bc_loss=bcn            
+        )         
+
+    else:
+        # Use physics loss weighted with data loss using fixed weights
+        combinedloss = WeightedSumLoss(
+            losses=[l2loss, resloss, ic, bcn],
+            weights=[args.data_loss, args.res_loss, args.ic_loss, args.bc_loss]
+        )
+        train_loss = combinedloss
+else:
+    train_loss = l2loss
+
+
+
+# Training the model
+# ---------------------
+
+# Print out the training info 
+print('\n### MAIN TRAINING ROUND ###\n')
+print('\n### MODEL ###\n', model)
+print('\n### OPTIMIZER ###\n', optimizer)
+print('\n### SCHEDULER ###\n', scheduler)
+if args.adapt in [2.0, 3.0]:
+    print('\n### AGGREGATOR ###\n', aggregator)
+else:
+    print('\n### AGGREGATOR ###\nNone (not used for this configuration)')
+print('\n### LOSSES ###')
+print(f'\n * Train: {train_loss}')
+print(f'\n * Test: {eval_losses}')
+print(f'\n * Saving best model according to: {args.eval_metric}')
+#sys.stdout.flush()
+
+# Create the trainer:
+trainer = Trainer(model=model, n_epochs=args.epochs + args.init_epochs,
+                  device=device,
+                  data_processor=data_processor,
+                  wandb_log=True,
+                  eval_interval=100,
+                  use_distributed=False,
+                  verbose=True
+                  )
+
+# Then train the model on the loaded dataset - save the best performing model according to given metric (default is the global mse score)
 eval_metric = f"({args.eval_res}, {args.eval_con})_{args.eval_metric}"
 print(f"Saving best model according to {eval_metric}")
 json_log_path=os.path.join(results_path, "training_log.json")
@@ -457,6 +563,7 @@ trainer.train(train_loader=train_loader,
               regularizer=False, 
               training_loss=train_loss,
               eval_losses=eval_losses,
+              resume_from_dir=results_path,
               save_best = eval_metric,
               save_dir = results_path,
               json_log_path = json_log_path
@@ -472,4 +579,3 @@ with open(training_log_json, 'w') as file:
 
 sys.stdout = sys.__stdout__
 log_file.close()
-#wandb.finish()
