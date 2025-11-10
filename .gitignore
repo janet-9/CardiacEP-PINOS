@@ -31,7 +31,3 @@ checkpoints/
 *.npy
 *.ckpt
 
-# Extra Scripts
-2D_AP_PINO_Res_Test.py
-data_constructor_openCARP.py
-data_inspection.py
