@@ -1,0 +1,333 @@
+
+### --------- ###
+
+Loading datasets from /storage/ceph/usr/k23086865/Projects/PINNS/2D_AP_PINO/datasets_2/openCARP_Data/centrifugal/0.8_trn-tst_200_frames_1_inputsteps_1_outputsteps_SEQ
+datasets_2/openCARP_Data/centrifugal/0.8_trn-tst_200_frames_1_inputsteps_1_outputsteps_SEQ/dataset_info_41_1.0.txt
+dx: 0.24390243902439024
+dy: 0.24390243902439024
+delta_t: 5 ms
+V_rest = 0.0, V_amp = 1.0
+Time boundary: 1 frames
+n_train: 159
+training_resolution: 41
+
+### --------- ###
+
+LOADING TEST DATASETS: ['datasets_2/openCARP_Data/centrifugal/0.8_trn-tst_200_frames_1_inputsteps_1_outputsteps_SEQ/dataset_info_34_1.0.txt', 'datasets_2/openCARP_Data/centrifugal/0.8_trn-tst_200_frames_1_inputsteps_1_outputsteps_SEQ/dataset_info_41_1.0.txt', 'datasets_2/openCARP_Data/centrifugal/0.8_trn-tst_200_frames_1_inputsteps_1_outputsteps_SEQ/dataset_info_51_1.0.txt']
+
+### --------- ###
+
+ Number of testing samples: [39, 39, 39]
+ Testing resolutions: [34, 41, 51]
+ Testing Conductivities: [1.0, 1.0, 1.0]
+ Testing batch sizes: [5, 5, 5]
+
+### --------- ###
+
+Loading Training Dataset for resolution 41 with 159 samples with 1.0 conductivity multiplier
+Loading Testing Dataset for resolution 34 with 39 samples with 1.0 conductivity multiplier
+Input Tensor: torch.Size([39, 2, 1, 34, 34])
+Output Tensor: torch.Size([39, 2, 1, 34, 34])
+Loading Testing Dataset for resolution 41 with 39 samples with 1.0 conductivity multiplier
+Input Tensor: torch.Size([39, 2, 1, 41, 41])
+Output Tensor: torch.Size([39, 2, 1, 41, 41])
+Loading Testing Dataset for resolution 51 with 39 samples with 1.0 conductivity multiplier
+Input Tensor: torch.Size([39, 2, 1, 51, 51])
+Output Tensor: torch.Size([39, 2, 1, 51, 51])
+
+### --------- ###
+
+Mesh size: 10 cm x 10 cm
+Sample Time Boundary: 1 frames with spacing 5 ms =  0.0 ms 
+Embedding Grid Boundaries = [[0, 0.0], [0, 10], [0, 10]]
+Sample Data shape: torch.Size([2, 1, 41, 41]): channels=2, time=1, H=41, W=41
+
+
+### --------- ###
+
+
+Model has 9450530 parameters.
+Calculating Residual Loss via Finite Difference
+
+### INITIAL TRAINING ROUND ###
+
+
+### MODEL ###
+ FNO(
+  (positional_embedding): GridEmbeddingND()
+  (fno_blocks): FNOBlocks(
+    (convs): ModuleList(
+      (0-3): 4 x SpectralConv(
+        (weight): DenseTensor(shape=torch.Size([32, 32, 8, 16, 9]), rank=None)
+      )
+    )
+    (fno_skips): ModuleList(
+      (0-3): 4 x Flattened1dConv(
+        (conv): Conv1d(32, 32, kernel_size=(1,), stride=(1,), bias=False)
+      )
+    )
+    (channel_mlp): ModuleList(
+      (0-3): 4 x ChannelMLP(
+        (fcs): ModuleList(
+          (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
+          (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (channel_mlp_skips): ModuleList(
+      (0-3): 4 x SoftGating()
+    )
+  )
+  (lifting): ChannelMLP(
+    (fcs): ModuleList(
+      (0): Conv1d(5, 64, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+    )
+  )
+  (projection): ChannelMLP(
+    (fcs): ModuleList(
+      (0): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(64, 2, kernel_size=(1,), stride=(1,))
+    )
+  )
+)
+
+### OPTIMIZER ###
+ AdamW (
+Parameter Group 0
+    betas: (0.9, 0.999)
+    correct_bias: True
+    eps: 1e-06
+    initial_lr: 0.0005
+    lr: 0.0005
+    weight_decay: 1e-05
+)
+
+### SCHEDULER ###
+ <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fe31eb50850>
+
+### LOSSES ###
+
+ * Train: <AP_neuralop_utils.losses.data_losses.LpLoss object at 0x7fe31eb505e0>
+
+ * Test: {'l2': <AP_neuralop_utils.losses.data_losses.LpLoss object at 0x7fe31eb505e0>, 'mse': <neuralop.losses.data_losses.MSELoss object at 0x7fe31eb50910>, 'rmse': <AP_neuralop_utils.losses.data_losses.RMSELoss object at 0x7fe31eb50ca0>, 'ap_phys': <AP_neuralop_utils.losses.equation_losses.APLoss object at 0x7fe1e84f8b20>, 'boundary': <AP_neuralop_utils.losses.data_losses.BoundaryLoss object at 0x7fe31eb50cd0>, 'ic': <AP_neuralop_utils.losses.data_losses.ICLoss object at 0x7fe31eb50c70>, 'bcn': <AP_neuralop_utils.losses.data_losses.BCNeumann object at 0x7fe1e84f8550>, 'phys_loss': <AP_neuralop_utils.losses.meta_losses.WeightedSumLoss object at 0x7fe1e84f8ee0>}
+
+ * Initial Training Round for 100 epochs
+Training on 159 samples
+Testing on [39, 39, 39] samples         on resolutions [(34, 1.0), (41, 1.0), (51, 1.0)].
+Raw outputs of shape torch.Size([15, 2, 1, 41, 41])
+[0] time=3.06, avg_loss=1.9857, train_err=28.7020
+Eval: (34, 1.0)_l2=96482976.0000, (34, 1.0)_mse=0.0088, (34, 1.0)_rmse=0.0191, (34, 1.0)_ap_phys=0.0146, (34, 1.0)_boundary=0.0067, (34, 1.0)_ic=0.0017, (34, 1.0)_bcn=0.0001, (34, 1.0)_phys_loss=0.0003, (41, 1.0)_l2=97346584.0000, (41, 1.0)_mse=0.0074, (41, 1.0)_rmse=0.0175, (41, 1.0)_ap_phys=0.0228, (41, 1.0)_boundary=0.0066, (41, 1.0)_ic=0.0012, (41, 1.0)_bcn=0.0001, (41, 1.0)_phys_loss=0.0004, (51, 1.0)_l2=121458784.0000, (51, 1.0)_mse=0.0074, (51, 1.0)_rmse=0.0175, (51, 1.0)_ap_phys=0.0443, (51, 1.0)_boundary=0.0067, (51, 1.0)_ic=0.0012, (51, 1.0)_bcn=0.0001, (51, 1.0)_phys_loss=0.0006
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[10] time=1.40, avg_loss=1.6856, train_err=24.3644
+Eval: (34, 1.0)_l2=116666472.0000, (34, 1.0)_mse=0.0093, (34, 1.0)_rmse=0.0196, (34, 1.0)_ap_phys=0.0300, (34, 1.0)_boundary=0.0098, (34, 1.0)_ic=0.0025, (34, 1.0)_bcn=0.0016, (34, 1.0)_phys_loss=0.0007, (41, 1.0)_l2=112616504.0000, (41, 1.0)_mse=0.0070, (41, 1.0)_rmse=0.0169, (41, 1.0)_ap_phys=0.0378, (41, 1.0)_boundary=0.0078, (41, 1.0)_ic=0.0016, (41, 1.0)_bcn=0.0025, (41, 1.0)_phys_loss=0.0008, (51, 1.0)_l2=140507888.0000, (51, 1.0)_mse=0.0070, (51, 1.0)_rmse=0.0169, (51, 1.0)_ap_phys=0.0715, (51, 1.0)_boundary=0.0078, (51, 1.0)_ic=0.0017, (51, 1.0)_bcn=0.0028, (51, 1.0)_phys_loss=0.0012
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[20] time=2.10, avg_loss=1.3902, train_err=20.0949
+Eval: (34, 1.0)_l2=33403436.0000, (34, 1.0)_mse=0.0023, (34, 1.0)_rmse=0.0094, (34, 1.0)_ap_phys=0.0208, (34, 1.0)_boundary=0.0029, (34, 1.0)_ic=0.0002, (34, 1.0)_bcn=0.0006, (34, 1.0)_phys_loss=0.0003, (41, 1.0)_l2=48454100.0000, (41, 1.0)_mse=0.0028, (41, 1.0)_rmse=0.0103, (41, 1.0)_ap_phys=0.0367, (41, 1.0)_boundary=0.0031, (41, 1.0)_ic=0.0003, (41, 1.0)_bcn=0.0005, (41, 1.0)_phys_loss=0.0004, (51, 1.0)_l2=60117628.0000, (51, 1.0)_mse=0.0027, (51, 1.0)_rmse=0.0102, (51, 1.0)_ap_phys=0.0654, (51, 1.0)_boundary=0.0031, (51, 1.0)_ic=0.0003, (51, 1.0)_bcn=0.0005, (51, 1.0)_phys_loss=0.0007
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[30] time=2.19, avg_loss=0.7149, train_err=10.3333
+Eval: (34, 1.0)_l2=41044744.0000, (34, 1.0)_mse=0.0046, (34, 1.0)_rmse=0.0136, (34, 1.0)_ap_phys=0.0182, (34, 1.0)_boundary=0.0043, (34, 1.0)_ic=0.0003, (34, 1.0)_bcn=0.0008, (34, 1.0)_phys_loss=0.0003, (41, 1.0)_l2=46106032.0000, (41, 1.0)_mse=0.0041, (41, 1.0)_rmse=0.0127, (41, 1.0)_ap_phys=0.0297, (41, 1.0)_boundary=0.0041, (41, 1.0)_ic=0.0003, (41, 1.0)_bcn=0.0011, (41, 1.0)_phys_loss=0.0004, (51, 1.0)_l2=57182864.0000, (51, 1.0)_mse=0.0041, (51, 1.0)_rmse=0.0127, (51, 1.0)_ap_phys=0.0542, (51, 1.0)_boundary=0.0041, (51, 1.0)_ic=0.0003, (51, 1.0)_bcn=0.0011, (51, 1.0)_phys_loss=0.0007
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[40] time=1.39, avg_loss=0.3683, train_err=5.3234
+Eval: (34, 1.0)_l2=36257864.0000, (34, 1.0)_mse=0.0014, (34, 1.0)_rmse=0.0074, (34, 1.0)_ap_phys=0.0107, (34, 1.0)_boundary=0.0013, (34, 1.0)_ic=0.0003, (34, 1.0)_bcn=0.0012, (34, 1.0)_phys_loss=0.0003, (41, 1.0)_l2=34085552.0000, (41, 1.0)_mse=0.0008, (41, 1.0)_rmse=0.0058, (41, 1.0)_ap_phys=0.0186, (41, 1.0)_boundary=0.0011, (41, 1.0)_ic=0.0001, (41, 1.0)_bcn=0.0013, (41, 1.0)_phys_loss=0.0003, (51, 1.0)_l2=42536568.0000, (51, 1.0)_mse=0.0008, (51, 1.0)_rmse=0.0058, (51, 1.0)_ap_phys=0.0341, (51, 1.0)_boundary=0.0011, (51, 1.0)_ic=0.0001, (51, 1.0)_bcn=0.0014, (51, 1.0)_phys_loss=0.0005
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[50] time=2.17, avg_loss=0.5227, train_err=7.5552
+Eval: (34, 1.0)_l2=26956118.0000, (34, 1.0)_mse=0.0010, (34, 1.0)_rmse=0.0064, (34, 1.0)_ap_phys=0.0080, (34, 1.0)_boundary=0.0010, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0010, (34, 1.0)_phys_loss=0.0002, (41, 1.0)_l2=26735202.0000, (41, 1.0)_mse=0.0008, (41, 1.0)_rmse=0.0054, (41, 1.0)_ap_phys=0.0146, (41, 1.0)_boundary=0.0009, (41, 1.0)_ic=0.0001, (41, 1.0)_bcn=0.0010, (41, 1.0)_phys_loss=0.0003, (51, 1.0)_l2=33320062.0000, (51, 1.0)_mse=0.0007, (51, 1.0)_rmse=0.0054, (51, 1.0)_ap_phys=0.0263, (51, 1.0)_boundary=0.0009, (51, 1.0)_ic=0.0001, (51, 1.0)_bcn=0.0011, (51, 1.0)_phys_loss=0.0004
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[60] time=2.09, avg_loss=0.3898, train_err=5.6343
+Eval: (34, 1.0)_l2=23020482.0000, (34, 1.0)_mse=0.0012, (34, 1.0)_rmse=0.0070, (34, 1.0)_ap_phys=0.0072, (34, 1.0)_boundary=0.0006, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0008, (34, 1.0)_phys_loss=0.0002, (41, 1.0)_l2=25577160.0000, (41, 1.0)_mse=0.0008, (41, 1.0)_rmse=0.0060, (41, 1.0)_ap_phys=0.0128, (41, 1.0)_boundary=0.0005, (41, 1.0)_ic=0.0001, (41, 1.0)_bcn=0.0007, (41, 1.0)_phys_loss=0.0002, (51, 1.0)_l2=31856480.0000, (51, 1.0)_mse=0.0008, (51, 1.0)_rmse=0.0060, (51, 1.0)_ap_phys=0.0226, (51, 1.0)_boundary=0.0006, (51, 1.0)_ic=0.0001, (51, 1.0)_bcn=0.0007, (51, 1.0)_phys_loss=0.0003
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[70] time=1.89, avg_loss=0.3056, train_err=4.4180
+Eval: (34, 1.0)_l2=23477848.0000, (34, 1.0)_mse=0.0010, (34, 1.0)_rmse=0.0066, (34, 1.0)_ap_phys=0.0057, (34, 1.0)_boundary=0.0005, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0006, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=17486040.0000, (41, 1.0)_mse=0.0006, (41, 1.0)_rmse=0.0051, (41, 1.0)_ap_phys=0.0099, (41, 1.0)_boundary=0.0005, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0005, (41, 1.0)_phys_loss=0.0002, (51, 1.0)_l2=21685102.0000, (51, 1.0)_mse=0.0006, (51, 1.0)_rmse=0.0051, (51, 1.0)_ap_phys=0.0178, (51, 1.0)_boundary=0.0005, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0005, (51, 1.0)_phys_loss=0.0002
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[80] time=1.86, avg_loss=0.2548, train_err=3.6834
+Eval: (34, 1.0)_l2=25159782.0000, (34, 1.0)_mse=0.0013, (34, 1.0)_rmse=0.0074, (34, 1.0)_ap_phys=0.0071, (34, 1.0)_boundary=0.0005, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0008, (34, 1.0)_phys_loss=0.0002, (41, 1.0)_l2=23121628.0000, (41, 1.0)_mse=0.0008, (41, 1.0)_rmse=0.0060, (41, 1.0)_ap_phys=0.0126, (41, 1.0)_boundary=0.0005, (41, 1.0)_ic=0.0001, (41, 1.0)_bcn=0.0006, (41, 1.0)_phys_loss=0.0002, (51, 1.0)_l2=28835026.0000, (51, 1.0)_mse=0.0009, (51, 1.0)_rmse=0.0060, (51, 1.0)_ap_phys=0.0221, (51, 1.0)_boundary=0.0006, (51, 1.0)_ic=0.0001, (51, 1.0)_bcn=0.0007, (51, 1.0)_phys_loss=0.0003
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[90] time=2.44, avg_loss=0.2063, train_err=2.9816
+Eval: (34, 1.0)_l2=19023472.0000, (34, 1.0)_mse=0.0008, (34, 1.0)_rmse=0.0056, (34, 1.0)_ap_phys=0.0060, (34, 1.0)_boundary=0.0006, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0007, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=15537789.0000, (41, 1.0)_mse=0.0005, (41, 1.0)_rmse=0.0043, (41, 1.0)_ap_phys=0.0105, (41, 1.0)_boundary=0.0005, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0005, (41, 1.0)_phys_loss=0.0002, (51, 1.0)_l2=19296732.0000, (51, 1.0)_mse=0.0005, (51, 1.0)_rmse=0.0043, (51, 1.0)_ap_phys=0.0184, (51, 1.0)_boundary=0.0005, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0005, (51, 1.0)_phys_loss=0.0002
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+
+### MAIN TRAINING ROUND ###
+
+
+### MODEL ###
+ FNO(
+  (positional_embedding): GridEmbeddingND()
+  (fno_blocks): FNOBlocks(
+    (convs): ModuleList(
+      (0-3): 4 x SpectralConv(
+        (weight): DenseTensor(shape=torch.Size([32, 32, 8, 16, 9]), rank=None)
+      )
+    )
+    (fno_skips): ModuleList(
+      (0-3): 4 x Flattened1dConv(
+        (conv): Conv1d(32, 32, kernel_size=(1,), stride=(1,), bias=False)
+      )
+    )
+    (channel_mlp): ModuleList(
+      (0-3): 4 x ChannelMLP(
+        (fcs): ModuleList(
+          (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
+          (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (channel_mlp_skips): ModuleList(
+      (0-3): 4 x SoftGating()
+    )
+  )
+  (lifting): ChannelMLP(
+    (fcs): ModuleList(
+      (0): Conv1d(5, 64, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+    )
+  )
+  (projection): ChannelMLP(
+    (fcs): ModuleList(
+      (0): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(64, 2, kernel_size=(1,), stride=(1,))
+    )
+  )
+)
+
+### OPTIMIZER ###
+ AdamW (
+Parameter Group 0
+    betas: (0.9, 0.999)
+    correct_bias: True
+    eps: 1e-06
+    initial_lr: 0.0005
+    lr: 0.0004877641290737878
+    weight_decay: 1e-05
+)
+
+### SCHEDULER ###
+ <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fe31eb50850>
+
+### AGGREGATOR ###
+ SoftAdapt()
+
+### LOSSES ###
+
+ * Train: <AP_neuralop_utils.losses.data_losses.LpLoss object at 0x7fe31eb505e0>
+
+ * Test: {'l2': <AP_neuralop_utils.losses.data_losses.LpLoss object at 0x7fe31eb505e0>, 'mse': <neuralop.losses.data_losses.MSELoss object at 0x7fe31eb50910>, 'rmse': <AP_neuralop_utils.losses.data_losses.RMSELoss object at 0x7fe31eb50ca0>, 'ap_phys': <AP_neuralop_utils.losses.equation_losses.APLoss object at 0x7fe1e84f8b20>, 'boundary': <AP_neuralop_utils.losses.data_losses.BoundaryLoss object at 0x7fe31eb50cd0>, 'ic': <AP_neuralop_utils.losses.data_losses.ICLoss object at 0x7fe31eb50c70>, 'bcn': <AP_neuralop_utils.losses.data_losses.BCNeumann object at 0x7fe1e84f8550>, 'phys_loss': <AP_neuralop_utils.losses.meta_losses.WeightedSumLoss object at 0x7fe1e84f8ee0>}
+
+ * Saving best model according to: phys_loss
+Saving best model according to (41, 1.0)_phys_loss
+Trainer resuming from epoch 99
+Training on 159 samples
+Testing on [39, 39, 39] samples         on resolutions [(34, 1.0), (41, 1.0), (51, 1.0)].
+[100] time=1.96, avg_loss=0.2428, train_err=3.5098
+Eval: (34, 1.0)_l2=24787042.0000, (34, 1.0)_mse=0.0015, (34, 1.0)_rmse=0.0079, (34, 1.0)_ap_phys=0.0061, (34, 1.0)_boundary=0.0005, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0007, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=19995126.0000, (41, 1.0)_mse=0.0010, (41, 1.0)_rmse=0.0065, (41, 1.0)_ap_phys=0.0103, (41, 1.0)_boundary=0.0006, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0004, (41, 1.0)_phys_loss=0.0002, (51, 1.0)_l2=24936740.0000, (51, 1.0)_mse=0.0010, (51, 1.0)_rmse=0.0065, (51, 1.0)_ap_phys=0.0179, (51, 1.0)_boundary=0.0006, (51, 1.0)_ic=0.0001, (51, 1.0)_bcn=0.0004, (51, 1.0)_phys_loss=0.0002
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[200] time=2.22, avg_loss=0.1317, train_err=1.9036
+Eval: (34, 1.0)_l2=18589338.0000, (34, 1.0)_mse=0.0006, (34, 1.0)_rmse=0.0051, (34, 1.0)_ap_phys=0.0047, (34, 1.0)_boundary=0.0004, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0007, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=15179432.0000, (41, 1.0)_mse=0.0003, (41, 1.0)_rmse=0.0036, (41, 1.0)_ap_phys=0.0082, (41, 1.0)_boundary=0.0003, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0002, (41, 1.0)_phys_loss=0.0001, (51, 1.0)_l2=18931726.0000, (51, 1.0)_mse=0.0003, (51, 1.0)_rmse=0.0036, (51, 1.0)_ap_phys=0.0139, (51, 1.0)_boundary=0.0004, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0002, (51, 1.0)_phys_loss=0.0002
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[300] time=4.50, avg_loss=0.1136, train_err=1.6417
+Eval: (34, 1.0)_l2=20353462.0000, (34, 1.0)_mse=0.0009, (34, 1.0)_rmse=0.0063, (34, 1.0)_ap_phys=0.0047, (34, 1.0)_boundary=0.0004, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0006, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=11466499.0000, (41, 1.0)_mse=0.0005, (41, 1.0)_rmse=0.0047, (41, 1.0)_ap_phys=0.0080, (41, 1.0)_boundary=0.0003, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0002, (41, 1.0)_phys_loss=0.0001, (51, 1.0)_l2=14284008.0000, (51, 1.0)_mse=0.0005, (51, 1.0)_rmse=0.0047, (51, 1.0)_ap_phys=0.0136, (51, 1.0)_boundary=0.0003, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0002, (51, 1.0)_phys_loss=0.0002
+[Rank 0]: saved training state to Results_centrifugal_PINO_2.0_41_train_res_41_eval_res_1000_phys_loss_1_frames05_11_2025-10_18
+[400] time=2.26, avg_loss=0.0784, train_err=1.1331
+Eval: (34, 1.0)_l2=21978310.0000, (34, 1.0)_mse=0.0009, (34, 1.0)_rmse=0.0060, (34, 1.0)_ap_phys=0.0048, (34, 1.0)_boundary=0.0004, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0007, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=14314906.0000, (41, 1.0)_mse=0.0005, (41, 1.0)_rmse=0.0044, (41, 1.0)_ap_phys=0.0081, (41, 1.0)_boundary=0.0004, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0002, (41, 1.0)_phys_loss=0.0001, (51, 1.0)_l2=17819192.0000, (51, 1.0)_mse=0.0005, (51, 1.0)_rmse=0.0044, (51, 1.0)_ap_phys=0.0137, (51, 1.0)_boundary=0.0004, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0002, (51, 1.0)_phys_loss=0.0002
+[500] time=2.05, avg_loss=0.0565, train_err=0.8160
+Eval: (34, 1.0)_l2=17595698.0000, (34, 1.0)_mse=0.0008, (34, 1.0)_rmse=0.0058, (34, 1.0)_ap_phys=0.0048, (34, 1.0)_boundary=0.0004, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0007, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=12344834.0000, (41, 1.0)_mse=0.0004, (41, 1.0)_rmse=0.0043, (41, 1.0)_ap_phys=0.0083, (41, 1.0)_boundary=0.0003, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0002, (41, 1.0)_phys_loss=0.0001, (51, 1.0)_l2=15378288.0000, (51, 1.0)_mse=0.0004, (51, 1.0)_rmse=0.0043, (51, 1.0)_ap_phys=0.0139, (51, 1.0)_boundary=0.0004, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0002, (51, 1.0)_phys_loss=0.0002
+[600] time=4.30, avg_loss=0.0564, train_err=0.8158
+Eval: (34, 1.0)_l2=21428772.0000, (34, 1.0)_mse=0.0008, (34, 1.0)_rmse=0.0058, (34, 1.0)_ap_phys=0.0051, (34, 1.0)_boundary=0.0004, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0007, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=16759513.0000, (41, 1.0)_mse=0.0004, (41, 1.0)_rmse=0.0043, (41, 1.0)_ap_phys=0.0087, (41, 1.0)_boundary=0.0004, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0003, (41, 1.0)_phys_loss=0.0001, (51, 1.0)_l2=20864452.0000, (51, 1.0)_mse=0.0004, (51, 1.0)_rmse=0.0043, (51, 1.0)_ap_phys=0.0147, (51, 1.0)_boundary=0.0004, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0002, (51, 1.0)_phys_loss=0.0002
+[700] time=2.23, avg_loss=0.0312, train_err=0.4509
+Eval: (34, 1.0)_l2=21243352.0000, (34, 1.0)_mse=0.0008, (34, 1.0)_rmse=0.0058, (34, 1.0)_ap_phys=0.0053, (34, 1.0)_boundary=0.0004, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0008, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=18704502.0000, (41, 1.0)_mse=0.0004, (41, 1.0)_rmse=0.0043, (41, 1.0)_ap_phys=0.0092, (41, 1.0)_boundary=0.0004, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0003, (41, 1.0)_phys_loss=0.0001, (51, 1.0)_l2=23292098.0000, (51, 1.0)_mse=0.0004, (51, 1.0)_rmse=0.0043, (51, 1.0)_ap_phys=0.0155, (51, 1.0)_boundary=0.0004, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0002, (51, 1.0)_phys_loss=0.0002
+[800] time=1.79, avg_loss=0.0233, train_err=0.3366
+Eval: (34, 1.0)_l2=20668758.0000, (34, 1.0)_mse=0.0008, (34, 1.0)_rmse=0.0057, (34, 1.0)_ap_phys=0.0051, (34, 1.0)_boundary=0.0004, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0008, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=18594938.0000, (41, 1.0)_mse=0.0004, (41, 1.0)_rmse=0.0043, (41, 1.0)_ap_phys=0.0089, (41, 1.0)_boundary=0.0004, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0003, (41, 1.0)_phys_loss=0.0001, (51, 1.0)_l2=23156238.0000, (51, 1.0)_mse=0.0004, (51, 1.0)_rmse=0.0043, (51, 1.0)_ap_phys=0.0150, (51, 1.0)_boundary=0.0004, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0002, (51, 1.0)_phys_loss=0.0002
+[900] time=1.95, avg_loss=0.0190, train_err=0.2753
+Eval: (34, 1.0)_l2=20692240.0000, (34, 1.0)_mse=0.0008, (34, 1.0)_rmse=0.0057, (34, 1.0)_ap_phys=0.0052, (34, 1.0)_boundary=0.0004, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0008, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=18957540.0000, (41, 1.0)_mse=0.0004, (41, 1.0)_rmse=0.0042, (41, 1.0)_ap_phys=0.0089, (41, 1.0)_boundary=0.0004, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0003, (41, 1.0)_phys_loss=0.0001, (51, 1.0)_l2=23610310.0000, (51, 1.0)_mse=0.0004, (51, 1.0)_rmse=0.0043, (51, 1.0)_ap_phys=0.0150, (51, 1.0)_boundary=0.0004, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0002, (51, 1.0)_phys_loss=0.0002
+[1000] time=2.09, avg_loss=0.0189, train_err=0.2732
+Eval: (34, 1.0)_l2=20649708.0000, (34, 1.0)_mse=0.0008, (34, 1.0)_rmse=0.0057, (34, 1.0)_ap_phys=0.0051, (34, 1.0)_boundary=0.0004, (34, 1.0)_ic=0.0001, (34, 1.0)_bcn=0.0008, (34, 1.0)_phys_loss=0.0001, (41, 1.0)_l2=18978202.0000, (41, 1.0)_mse=0.0004, (41, 1.0)_rmse=0.0042, (41, 1.0)_ap_phys=0.0089, (41, 1.0)_boundary=0.0004, (41, 1.0)_ic=0.0000, (41, 1.0)_bcn=0.0003, (41, 1.0)_phys_loss=0.0001, (51, 1.0)_l2=23636300.0000, (51, 1.0)_mse=0.0004, (51, 1.0)_rmse=0.0043, (51, 1.0)_ap_phys=0.0150, (51, 1.0)_boundary=0.0004, (51, 1.0)_ic=0.0000, (51, 1.0)_bcn=0.0002, (51, 1.0)_phys_loss=0.0002

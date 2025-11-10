@@ -1,0 +1,9 @@
+{
+  "phase": "",
+  "net_training_time_sec": 2618.149250416085,
+  "net_training_time_min": 43.63582084026809,
+  "min_mse": 0.0071855331771075726,
+  "min_mse_epoch": 1001,
+  "min_rmse": 0.01734626106917858,
+  "min_rmse_epoch": 1001
+}

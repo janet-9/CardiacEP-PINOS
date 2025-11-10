@@ -1,0 +1,78 @@
+{
+  "Channel 0 (0 = Voltage, 1 = Recovery Current)": {
+    "Avg Mean Absolute Error": 0.01947813108563423,
+    "Average Cell Error": 0.019478129222989082,
+    "Average Error of Top 10 Worst Cells": 0.03290735185146332,
+    "Mean Signed Error (Bias)": 0.01947813108563423,
+    "Max Signed Error": 0.3296298384666443,
+    "Pct Errors > Avg MAE": 23.95642805666444,
+    "Pct Cells with Avg Error > Avg Cell Error": 37.65586034912718,
+    "Worst Case Results": {
+      "Timestep": 198,
+      "Cell [x, y]": [
+        214,
+        324
+      ],
+      "Absolute Error": 0.3296298384666443
+    },
+    "Best Case Results": {
+      "Timestep": 8,
+      "Cell [x, y]": [
+        371,
+        322
+      ],
+      "Absolute Error": 0.0
+    },
+    "Best/Worst Cells Over Time": {
+      "Best Cell [x, y]": [
+        247,
+        58
+      ],
+      "Best Cell Avg Error": 0.008061389438807964,
+      "Worst Cell [x, y]": [
+        0,
+        0
+      ],
+      "Worst Cell Avg Error": 0.06494815647602081
+    },
+    "Overall RMSE:": 0.03541293367743492
+  },
+  "Channel 1 (0 = Voltage, 1 = Recovery Current)": {
+    "Avg Mean Absolute Error": 0.027858426794409752,
+    "Average Cell Error": 0.027858426794409752,
+    "Average Error of Top 10 Worst Cells": 0.04361080750823021,
+    "Mean Signed Error (Bias)": 0.027858424931764603,
+    "Max Signed Error": 0.3427222967147827,
+    "Pct Errors > Avg MAE": 24.187698025203535,
+    "Pct Cells with Avg Error > Avg Cell Error": 44.88778054862843,
+    "Worst Case Results": {
+      "Timestep": 198,
+      "Cell [x, y]": [
+        7,
+        387
+      ],
+      "Absolute Error": 0.3427222967147827
+    },
+    "Best Case Results": {
+      "Timestep": 5,
+      "Cell [x, y]": [
+        109,
+        342
+      ],
+      "Absolute Error": 0.0
+    },
+    "Best/Worst Cells Over Time": {
+      "Best Cell [x, y]": [
+        151,
+        168
+      ],
+      "Best Cell Avg Error": 0.009505107998847961,
+      "Worst Cell [x, y]": [
+        274,
+        0
+      ],
+      "Worst Cell Avg Error": 0.0686127319931984
+    },
+    "Overall RMSE:": 0.05007446929812431
+  }
+}
