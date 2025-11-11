@@ -15,21 +15,21 @@
 
 - 2. Plots demonstrating the change in evaluation RMSE values for each training run. 
 <p align="center">
-  <img src="Epoch_comparison_1000ms_NORM.png" width="80%" alt="Performance evaluation via trainng epochs">
+  <img src="Epoch_Results/Epoch_comparison_1000ms_NORM.png" width="80%" alt="Performance evaluation via trainng epochs">
 </p>
 
 --
-### **Mesh Resolution Results (x10) **
+### **Mesh Resolution Results (x10)**
 
 - 1. Results for each of the PINO models for each scenario trained on a low (downsampled) resolution and evaluated on the groudn truth resolution. (trained on 41x41 and evaluated on 401x401). 
 
 - 2. Plots demonstrating the change in evaluation RMSE values for each evaluation resolution
 <p align="center">
-  <img src="Resolution_Invariance.png" width="80%" alt="Performance evaluation for different training resolutions">
+  <img src="Mesh_Resolution_Results_x10/Resolution_Invariance.png" width="80%" alt="Performance evaluation for different training resolutions">
 </p>
 
 --
-### **Zero Shot Transfer **
+### **Zero Shot Transfer**
 
 - 1. **Zero_shot_centri2stable** : Compares the predictions on the stable propagation set using the model trained on stable propagation data and on centrifugal propagation data. 
 
