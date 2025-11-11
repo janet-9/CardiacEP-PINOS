@@ -44,11 +44,13 @@ Each results folder includes **side-by-side animations** comparing model predict
 
     ```bash
     python PINO_Train.py -d <dataset_path> -<additional arguments>
+    ```
 
     To inspect optional arguments, run: 
 
     ```bash
     python PINO_Train.py --help
+    ```
 ---
 
 ## Citation
