@@ -45,7 +45,10 @@ Each results folder includes **side-by-side animations** comparing model predict
     ```bash
     python PINO_Train.py -d <dataset_path> -<additional arguments>
 
+    To inspect optional arguments, run: 
 
+    ```bash
+    python PINO_Train.py --help
 ---
 
 ## Citation
@@ -53,6 +56,12 @@ If you use this repository in your work, please cite:
 > *"Physics-Informed Neural Operators for Cardiac Electrophysiology"*  
 > (Add ArXiv link)
 
+Additionally, this repository makes use of the Neural Operator library. Please cite:
+
+>"A Library for Learning Neural Operators."
+>Kossaifi, J., Kovachki, N., Li, Z., Pitt, D., Liu-Schiaffini, M., Duruisseaux, V., George, R., Bonev, B., Azizzadenesheli, K., Berner, J., and Anandkumar, A.
+>arXiv, 2025.
+>doi:10.48550/arXiv.2412.10354
 ---
 
 ## Contact
