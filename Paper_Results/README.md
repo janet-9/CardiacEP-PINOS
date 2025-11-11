@@ -25,7 +25,7 @@
 
 - 2. Plots demonstrating the change in evaluation RMSE values for each evaluation resolution
 <p align="center">
-  <img src="Mesh_Resolution_Results_x10/Resolution_Invariance.png" width="80%" alt="Performance evaluation for different training resolutions">
+  <img src="Mesh_Resolution_Results_x10/Resolution_Invariance.png" width="60%" alt="Performance evaluation for different training resolutions">
 </p>
 
 --
