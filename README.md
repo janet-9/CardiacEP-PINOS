@@ -13,9 +13,13 @@ Contains the scripts for transforming simulation data into training, testing and
 Evaluation results for the experiments detailed in the accompanying work "PHYSICS INFORMED NEURAL OPERATORS FOR CARDIAC ELECTROPHYSIOLOGY", including the baseline tests, mesh resolution testing, and zero shot transfer experiments. All of the results folders contain side by side animations of the predicted and ground truth simulations. 
 
 **Scripts**
-Training script for the PINO model, and evalution scripts for assessing the model on a 'Point to Point' or 'Roll-Out' basis, as discussed in the paper. Also contains a script for comparing the results of different models on the same evaluation dataset. 
+"PINO_Train.py": Training script for the PINO model, options to incorporate different PINO models and training parameters. Model will be saved on a timestamped results file. 
+"Evaluation_P2P.py": Script to evaluate the trained model on a point-to-point basis (ground truth inputs used for predictions)
+"Evaluation_Rollout.py": Script to evaluate the trained model using a single input to predict in a recursive fashion with previous model outputs. 
+"Model_Comparison.py": Script to compare the performance of multiple models on the same evaluation set. 
 
-**Usage**
+
+## Usage
 Install the neuralops library from: https://github.com/neuraloperator/neuraloperator following the installation instructions. 
 
 Run the training and evaluation scripts found in scripts using relevant arguments for your experiments. 
