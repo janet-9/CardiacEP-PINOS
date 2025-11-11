@@ -2,6 +2,10 @@
 
 Repository for the work **"Physics-Informed Neural Operators for Cardiac Electrophysiology"**.
 
+<p align="center">
+  <img src="AP_neuralop_utils/Model_archiecture.png" width="80%" alt="Model Architecture Diagram">
+</p>
+
 This repository provides training and evaluation scripts for running a **Physics-Informed Neural Operator (PINO)** model for simulating cardiac electrophysiology propagation scenarios using the **Aliev–Panfilov (AP)** cardiac cell model.  
 It also includes the results of the experiments presented in the accompanying paper, including **animations of model predictions**.
 
