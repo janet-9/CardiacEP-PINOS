@@ -29,8 +29,4 @@ checkpoints/
 *.npz
 *.npy
 *.ckpt
-
-# Large Files 
-Baseline_Results_200_frame/
-centrifugal/
-planar/
+data_inspection.py 

@@ -16,7 +16,7 @@ It also includes the results of the experiments presented in the accompanying pa
 ### **Data**
 Contains scripts for transforming raw simulation data into **training, testing, and evaluation datasets**, as well as example dataset folders for the **planar**, **centrifugal**, **spiral**, and **spiral-break** propagation scenarios.
 
-### **Paper_Results**
+### **Paper Results**
 Includes evaluation results for the experiments described in *"Physics-Informed Neural Operators for Cardiac Electrophysiology"*.  
 Results cover **baseline tests**, **mesh resolution experiments**, and **zero-shot transfer** evaluations.  
 Each results folder includes **side-by-side animations** comparing model predictions with ground truth simulations.
