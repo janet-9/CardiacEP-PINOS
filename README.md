@@ -60,7 +60,7 @@ Each results folder includes **side-by-side animations** comparing model predict
 ## Citation
 If you use this repository in your work, please cite:  
 > *"Physics-Informed Neural Operators for Cardiac Electrophysiology"*  
-> (Add ArXiv link)
+> ([https://arxiv.org/abs/2511.08418](https://arxiv.org/abs/2511.08418))
 
 Additionally, this repository makes use of the Neural Operator library. Please cite:
 
