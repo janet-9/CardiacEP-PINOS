@@ -30,3 +30,5 @@ checkpoints/
 *.npy
 *.ckpt
 data_inspection.py 
+example_simulation_folders
+2025-10*
