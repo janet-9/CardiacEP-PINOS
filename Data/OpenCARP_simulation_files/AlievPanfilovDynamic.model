@@ -1,0 +1,45 @@
+group { 
+  #Authors ::= Rubin R. Aliev, Alexander V. Panfilov
+  #Year ::= 1996
+  #Title ::= A simple two-variable model of cardiac excitation
+  #Journal ::= Chaos, Solitons & Fractals, 7(3),293-301
+  #DOI ::= 10.1016/0960-0779(95)00089-5
+} .reference();
+
+Vm; .external(Vm); .nodal();
+Iion; .external(); .nodal();
+// V; .external(V); .nodal();
+
+t_norm  =  12.9; // 12.9 time units per ms
+vm_norm = 100;   // 1 voltage unit of U = 100 mV
+vm_rest = -80;   // resting leVolel for U=0
+
+touAcm2=100/12.9;
+
+V_init = 0;
+Vm_init=vm_rest;
+
+group { 
+  mu1 = 0.2;
+  mu2 = 0.3;
+  K = 8;
+  epsilon = 0.002;
+  a = 0.15;
+  b = 0.15;
+}.param();
+
+group {
+ U; 
+ Vm;
+ V;
+ Iion;
+}.trace();
+
+// Normalise the transmembrane voltage 
+U=(Vm-vm_rest)/vm_norm;
+
+// Calculate the recovery current 
+diff_V = -(epsilon+mu1*V/(mu2+U))*(V+K*U*(U-a-1))/t_norm;
+
+// Calculate the ionic current. 
+Iion = (K*U*(U-b)*(U-1)+U*V)*touAcm2;

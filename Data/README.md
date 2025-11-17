@@ -33,9 +33,12 @@ These datasets are saved with spatial resolution 101 x 101, time resolution 5ms,
 
 ## **OpenCARP simulation files**
 
-Contains the carputils script used to generate the simulation files and the simulation folders used to generate the example datasets. 
+Contains the carputils script, mesh and state files used to generate the ground truth simulation data. 
 
-To run the simulation script, ensure that all of the necessary requirements are installed from: [https://opencarp.org/](https://opencarp.org/), and then run:
+To run the simulation script:
+1. Ensure that all of the necessary requirements are installed from: [https://opencarp.org/](https://opencarp.org/)
+2. Build the 'AlievPanfilovDynamic.model' cell model has been into the architecture (follow the [https://opencarp.org/documentation/examples/01_ep_single_cell/04_limpet_fe](example) from the openCARP website)
+3. Run:
 
 ```bash
 python 2D_Waves_AP.py --protocol '<protocol>' <additional arguments>
