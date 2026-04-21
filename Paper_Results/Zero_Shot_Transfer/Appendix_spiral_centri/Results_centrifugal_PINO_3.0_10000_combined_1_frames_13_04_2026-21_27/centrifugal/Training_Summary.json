@@ -1,0 +1,8 @@
+{
+  "net_training_time_sec": 39829.56349536218,
+  "net_training_time_min": 663.8260582560363,
+  "min_mse": 4.3096006265841424e-06,
+  "min_mse_epoch": 7193,
+  "min_rmse": 0.000392925925552845,
+  "min_rmse_epoch": 7193
+}

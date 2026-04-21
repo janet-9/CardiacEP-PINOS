@@ -1,0 +1,218 @@
+
+### --------- ###
+
+Loading datasets from /storage/ceph/usr/k23086865/Projects/PIML_CardiacEP/CardiacEP-PINOS/datasets/chaotic/0.8_trn-tst_200_frames_5_inputsteps_5_outputsteps_SEQ
+datasets/chaotic/0.8_trn-tst_200_frames_5_inputsteps_5_outputsteps_SEQ/dataset_info_101_1.0.txt
+dx: 0.09900990099009901
+dy: 0.09900990099009901
+delta_t: 5 ms
+V_rest = 0.0, V_amp = 0.98
+Time boundary: 5 frames
+n_train: 152
+training_resolution: 101
+
+### --------- ###
+
+
+### --------- ###
+
+ Number of testing samples: [30]
+ Testing resolutions: [101]
+ Testing Conductivities: [1.0]
+ Testing batch sizes: [5]
+
+### --------- ###
+
+Loading Training Dataset for resolution 101 with 152 samples with 1.0 conductivity multiplier
+Loading Testing Dataset for resolution 101 with 30 samples with 1.0 conductivity multiplier
+Input Tensor: torch.Size([30, 2, 5, 101, 101])
+Output Tensor: torch.Size([30, 2, 5, 101, 101])
+
+### --------- ###
+
+Mesh size: 10 cm x 10 cm
+Sample Time Boundary: 5 frames with spacing 5 ms =  20.0 ms 
+Embedding Grid Boundaries = [[0, 20.0], [0, 10], [0, 10]]
+Sample Data shape: torch.Size([2, 5, 101, 101]): channels=2, time=5, H=101, W=101
+
+
+### --------- ###
+
+
+Model has 9450530 parameters.
+Calculating Residual Loss via Finite Difference
+
+### INITIAL TRAINING ROUND ###
+
+
+### MODEL ###
+ FNO(
+  (positional_embedding): GridEmbeddingND()
+  (fno_blocks): FNOBlocks(
+    (convs): ModuleList(
+      (0-3): 4 x SpectralConv(
+        (weight): DenseTensor(shape=torch.Size([32, 32, 8, 16, 9]), rank=None)
+      )
+    )
+    (fno_skips): ModuleList(
+      (0-3): 4 x Flattened1dConv(
+        (conv): Conv1d(32, 32, kernel_size=(1,), stride=(1,), bias=False)
+      )
+    )
+    (channel_mlp): ModuleList(
+      (0-3): 4 x ChannelMLP(
+        (fcs): ModuleList(
+          (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
+          (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (channel_mlp_skips): ModuleList(
+      (0-3): 4 x SoftGating()
+    )
+  )
+  (lifting): ChannelMLP(
+    (fcs): ModuleList(
+      (0): Conv1d(5, 64, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+    )
+  )
+  (projection): ChannelMLP(
+    (fcs): ModuleList(
+      (0): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(64, 2, kernel_size=(1,), stride=(1,))
+    )
+  )
+)
+
+### OPTIMIZER ###
+ AdamW (
+Parameter Group 0
+    betas: (0.9, 0.999)
+    correct_bias: True
+    eps: 1e-06
+    initial_lr: 0.0005
+    lr: 0.0005
+    weight_decay: 1e-05
+)
+
+### SCHEDULER ###
+ <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f999e29d760>
+
+### LOSSES ###
+
+ * Train: <AP_neuralop_utils.losses.data_losses.LpLoss object at 0x7f999e29d8b0>
+
+ * Test: {'l2': <AP_neuralop_utils.losses.data_losses.LpLoss object at 0x7f999e29d8b0>, 'mse': <neuralop.losses.data_losses.MSELoss object at 0x7f999e29d820>, 'rmse': <AP_neuralop_utils.losses.data_losses.RMSELoss object at 0x7f999e29dbe0>, 'ap_phys': <AP_neuralop_utils.losses.equation_losses.APLoss object at 0x7f999b280c10>, 'boundary': <AP_neuralop_utils.losses.data_losses.BoundaryLoss object at 0x7f999e29db50>, 'ic': <AP_neuralop_utils.losses.data_losses.ICLoss object at 0x7f999b280ac0>, 'bcn': <AP_neuralop_utils.losses.data_losses.BCNeumann object at 0x7f999b280a00>, 'phys_loss': <AP_neuralop_utils.losses.meta_losses.WeightedSumLoss object at 0x7f999b280df0>}
+
+ * Initial Training Round for 10 epochs
+Training on 152 samples
+Testing on [30] samples         on resolutions [(101, 1.0)].
+Found resolutions: torch.Size([5, 101, 101]) = 3
+Raw outputs of shape torch.Size([15, 2, 5, 101, 101])
+[0] time=35.19, avg_loss=9.2904, train_err=128.3764
+Eval: (101, 1.0)_l2=8.5127, (101, 1.0)_mse=0.2940, (101, 1.0)_rmse=0.1083, (101, 1.0)_ap_phys=0.1840, (101, 1.0)_boundary=0.1455, (101, 1.0)_ic=0.0360, (101, 1.0)_bcn=0.0000, (101, 1.0)_phys_loss=0.0054
+[Rank 0]: saved training state to Results_chaotic_Data_Only_mse_5_frames_16_04_2026-11_10
+[Rank 0]: saved training state to Results_chaotic_Data_Only_mse_5_frames_16_04_2026-11_10
+[Rank 0]: saved training state to Results_chaotic_Data_Only_mse_5_frames_16_04_2026-11_10
+[Rank 0]: saved training state to Results_chaotic_Data_Only_mse_5_frames_16_04_2026-11_10
+[Rank 0]: saved training state to Results_chaotic_Data_Only_mse_5_frames_16_04_2026-11_10
+[Rank 0]: saved training state to Results_chaotic_Data_Only_mse_5_frames_16_04_2026-11_10
+[Rank 0]: saved training state to Results_chaotic_Data_Only_mse_5_frames_16_04_2026-11_10
+[Rank 0]: saved training state to Results_chaotic_Data_Only_mse_5_frames_16_04_2026-11_10
+[Rank 0]: saved training state to Results_chaotic_Data_Only_mse_5_frames_16_04_2026-11_10
+[Rank 0]: saved training state to Results_chaotic_Data_Only_mse_5_frames_16_04_2026-11_10
+
+### MAIN TRAINING ROUND ###
+
+
+### MODEL ###
+ FNO(
+  (positional_embedding): GridEmbeddingND()
+  (fno_blocks): FNOBlocks(
+    (convs): ModuleList(
+      (0-3): 4 x SpectralConv(
+        (weight): DenseTensor(shape=torch.Size([32, 32, 8, 16, 9]), rank=None)
+      )
+    )
+    (fno_skips): ModuleList(
+      (0-3): 4 x Flattened1dConv(
+        (conv): Conv1d(32, 32, kernel_size=(1,), stride=(1,), bias=False)
+      )
+    )
+    (channel_mlp): ModuleList(
+      (0-3): 4 x ChannelMLP(
+        (fcs): ModuleList(
+          (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
+          (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (channel_mlp_skips): ModuleList(
+      (0-3): 4 x SoftGating()
+    )
+  )
+  (lifting): ChannelMLP(
+    (fcs): ModuleList(
+      (0): Conv1d(5, 64, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+    )
+  )
+  (projection): ChannelMLP(
+    (fcs): ModuleList(
+      (0): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(64, 2, kernel_size=(1,), stride=(1,))
+    )
+  )
+)
+
+### OPTIMIZER ###
+ AdamW (
+Parameter Group 0
+    betas: (0.9, 0.999)
+    correct_bias: True
+    eps: 1e-06
+    initial_lr: 0.0005
+    lr: 0.0004998766400914328
+    weight_decay: 1e-05
+)
+
+### SCHEDULER ###
+ <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f999e29d760>
+
+### AGGREGATOR ###
+ Relobralo()
+
+### LOSSES ###
+
+ * Train: <AP_neuralop_utils.losses.data_losses.LpLoss object at 0x7f999e29d8b0>
+
+ * Test: {'l2': <AP_neuralop_utils.losses.data_losses.LpLoss object at 0x7f999e29d8b0>, 'mse': <neuralop.losses.data_losses.MSELoss object at 0x7f999e29d820>, 'rmse': <AP_neuralop_utils.losses.data_losses.RMSELoss object at 0x7f999e29dbe0>, 'ap_phys': <AP_neuralop_utils.losses.equation_losses.APLoss object at 0x7f999b280c10>, 'boundary': <AP_neuralop_utils.losses.data_losses.BoundaryLoss object at 0x7f999e29db50>, 'ic': <AP_neuralop_utils.losses.data_losses.ICLoss object at 0x7f999b280ac0>, 'bcn': <AP_neuralop_utils.losses.data_losses.BCNeumann object at 0x7f999b280a00>, 'phys_loss': <AP_neuralop_utils.losses.meta_losses.WeightedSumLoss object at 0x7f999b280df0>}
+
+ * Saving best model according to: mse
+Saving best model according to (101, 1.0)_mse
+Saving best model from physics run to Results_chaotic_PINO_3.0_900_mse_5_frames16_04_2026-11_10
+Trainer resuming from epoch 9
+Training on 152 samples
+Testing on [30] samples         on resolutions [(101, 1.0)].
+[100] time=23.83, avg_loss=0.6758, train_err=9.3386
+Eval: (101, 1.0)_l2=3.0915, (101, 1.0)_mse=0.0358, (101, 1.0)_rmse=0.0376, (101, 1.0)_ap_phys=3.3911, (101, 1.0)_boundary=0.0189, (101, 1.0)_ic=0.0050, (101, 1.0)_bcn=0.0381, (101, 1.0)_phys_loss=0.0382
+[Rank 0]: saved training state to Results_chaotic_PINO_3.0_900_mse_5_frames16_04_2026-11_10
+[200] time=23.01, avg_loss=0.4531, train_err=6.2603
+Eval: (101, 1.0)_l2=3.2515, (101, 1.0)_mse=0.0406, (101, 1.0)_rmse=0.0400, (101, 1.0)_ap_phys=3.1540, (101, 1.0)_boundary=0.0218, (101, 1.0)_ic=0.0051, (101, 1.0)_bcn=0.0369, (101, 1.0)_phys_loss=0.0357
+[300] time=22.27, avg_loss=0.3111, train_err=4.2985
+Eval: (101, 1.0)_l2=3.0663, (101, 1.0)_mse=0.0364, (101, 1.0)_rmse=0.0378, (101, 1.0)_ap_phys=3.5926, (101, 1.0)_boundary=0.0204, (101, 1.0)_ic=0.0043, (101, 1.0)_bcn=0.0375, (101, 1.0)_phys_loss=0.0401
+[400] time=21.87, avg_loss=0.2399, train_err=3.3145
+Eval: (101, 1.0)_l2=3.1380, (101, 1.0)_mse=0.0384, (101, 1.0)_rmse=0.0388, (101, 1.0)_ap_phys=3.4123, (101, 1.0)_boundary=0.0213, (101, 1.0)_ic=0.0044, (101, 1.0)_bcn=0.0391, (101, 1.0)_phys_loss=0.0385
+[500] time=21.14, avg_loss=0.1825, train_err=2.5215
+Eval: (101, 1.0)_l2=3.1449, (101, 1.0)_mse=0.0386, (101, 1.0)_rmse=0.0389, (101, 1.0)_ap_phys=3.5845, (101, 1.0)_boundary=0.0214, (101, 1.0)_ic=0.0045, (101, 1.0)_bcn=0.0385, (101, 1.0)_phys_loss=0.0401
+[600] time=23.72, avg_loss=0.1445, train_err=1.9962
+Eval: (101, 1.0)_l2=3.0851, (101, 1.0)_mse=0.0373, (101, 1.0)_rmse=0.0382, (101, 1.0)_ap_phys=3.5399, (101, 1.0)_boundary=0.0200, (101, 1.0)_ic=0.0042, (101, 1.0)_bcn=0.0394, (101, 1.0)_phys_loss=0.0398
+[700] time=29.88, avg_loss=0.0917, train_err=1.2675
+Eval: (101, 1.0)_l2=3.0648, (101, 1.0)_mse=0.0365, (101, 1.0)_rmse=0.0378, (101, 1.0)_ap_phys=3.5448, (101, 1.0)_boundary=0.0198, (101, 1.0)_ic=0.0043, (101, 1.0)_bcn=0.0400, (101, 1.0)_phys_loss=0.0399
+[800] time=22.41, avg_loss=0.0722, train_err=0.9979
+Eval: (101, 1.0)_l2=2.9921, (101, 1.0)_mse=0.0347, (101, 1.0)_rmse=0.0368, (101, 1.0)_ap_phys=3.6061, (101, 1.0)_boundary=0.0187, (101, 1.0)_ic=0.0041, (101, 1.0)_bcn=0.0399, (101, 1.0)_phys_loss=0.0405
+[Rank 0]: saved training state to Results_chaotic_PINO_3.0_900_mse_5_frames16_04_2026-11_10
+[900] time=19.42, avg_loss=0.0674, train_err=0.9310
+Eval: (101, 1.0)_l2=2.9862, (101, 1.0)_mse=0.0345, (101, 1.0)_rmse=0.0367, (101, 1.0)_ap_phys=3.6164, (101, 1.0)_boundary=0.0186, (101, 1.0)_ic=0.0041, (101, 1.0)_bcn=0.0400, (101, 1.0)_phys_loss=0.0406
+[Rank 0]: saved training state to Results_chaotic_PINO_3.0_900_mse_5_frames16_04_2026-11_10
